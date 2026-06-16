@@ -1,7 +1,7 @@
 ---
 epic: "1"
 story: "3"
-status: "review"
+status: "done"
 title: "Local Deterministic Parsing for Statements & Logs"
 baseline_commit: "NO_VCS"
 ---
@@ -75,8 +75,16 @@ So that my sensitive data is extracted without leaving my machine.
 - Verify typescript types are strictly checked and `"DOM.Iterable"` remains in tsconfig to support array conversions from file drops.
 
 ## 5. Completion Status
-**Status:** review
-**Note:** In-memory PDF extraction, regex statement parsing, and WhatsApp/SMS logs parsing implemented, verified with unit tests, and fully integrated with the UI.
+**Status:** done
+**Note:** In-memory PDF extraction, regex statement parsing, and WhatsApp/SMS logs parsing implemented, verified with unit tests, and fully integrated with the UI. All odd-numbered code review findings have been resolved.
+
+### Review Findings
+- [x] [Review][Patch] Issue 1: PDF.js multi-column text extraction sorting [src/parsers/pdf-extractor.ts:25]
+- [ ] [Review][Defer] Issue 2: Dynamic worker CDN internet dependency [src/parsers/pdf-extractor.ts:6]
+- [x] [Review][Patch] Issue 3: Double negation on inflow/outflow sign check [src/parsers/pdf-extractor.ts:180]
+- [ ] [Review][Defer] Issue 4: Incomplete SMS Date parsing / Fallback timestamp sorting [src/parsers/chat-extractor.ts:89]
+- [x] [Review][Patch] Issue 5: Parser error boundary recovery failure (stuck loading) [src/components/chat/DropzoneArea.tsx:84]
+- [ ] [Review][Defer] Issue 6: Duplicate transaction import detection [src/store/useReconciliationStore.ts:13]
 
 ## Tasks / Subtasks
 - [x] Define shared TypeScript interfaces for `ParsedTransaction` and `ParsedChatMessage` in `src/types/index.ts`

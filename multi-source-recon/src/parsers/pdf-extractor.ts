@@ -23,10 +23,24 @@ export async function extractTextFromPDF(arrayBuffer: ArrayBuffer): Promise<Pars
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
       const textContent = await page.getTextContent();
-      const pageItems = textContent.items as Array<{ str: string }>;
+      const pageItems = textContent.items as Array<{ str: string; transform: number[] }>;
       
-      // Join items on the same line or with space separation
-      const pageText = pageItems.map(item => item.str).join(' ');
+      // Sort items in logical reading order: top-to-bottom, left-to-right
+      const sortedItems = [...pageItems].sort((a, b) => {
+        const ax = a.transform[4];
+        const ay = a.transform[5];
+        const bx = b.transform[4];
+        const by = b.transform[5];
+        
+        // If items are on the same line (approximate vertical position), sort left-to-right
+        if (Math.abs(ay - by) < 5) {
+          return ax - bx;
+        }
+        // Otherwise, sort top-to-bottom
+        return by - ay;
+      });
+
+      const pageText = sortedItems.map(item => item.str).join(' ');
       fullText += pageText + '\n';
     }
 
@@ -164,18 +178,18 @@ export function parseBankTransactions(text: string, fileName: string): ParserRes
         } else if (amounts.length >= 3) {
           // If Debit, Credit, Balance layout (e.g., 500.00 0.00 4500.00)
           if (amounts[0] !== 0 && amounts[1] === 0) {
-            amount = -amounts[0]; // Debit (typically negative in our store for outflows)
+            amount = -Math.abs(amounts[0]); // Debit (typically negative in our store for outflows)
           } else if (amounts[0] === 0 && amounts[1] !== 0) {
-            amount = amounts[1]; // Credit (positive)
+            amount = Math.abs(amounts[1]); // Credit (positive)
           } else if (amounts[0] !== 0 && amounts[1] !== 0) {
             // Check if there is text in the line indicating debit/withdrawal vs credit/deposit
             const lowerLine = line.toLowerCase();
             const isDebit = lowerLine.includes('debit') || lowerLine.includes('wd') || lowerLine.includes('dr') || lowerLine.includes('withdrawal');
             const isCredit = lowerLine.includes('credit') || lowerLine.includes('cr') || lowerLine.includes('deposit');
             if (isDebit && !isCredit) {
-              amount = -amounts[0];
+              amount = -Math.abs(amounts[0]);
             } else if (isCredit && !isDebit) {
-              amount = amounts[0];
+              amount = Math.abs(amounts[0]);
             }
           }
         }
@@ -185,12 +199,10 @@ export function parseBankTransactions(text: string, fileName: string): ParserRes
       // Often, debits are shown as positive numbers in statement columns.
       // Let's see if the line contains keywords for debit/credit:
       const lowerLine = line.toLowerCase();
-      if (amount > 0) {
-        const isOutflow = lowerLine.includes('debit') || lowerLine.includes('dr') || lowerLine.includes('payment') || lowerLine.includes('transfer to') || lowerLine.includes('withdrawn');
-        const isInflow = lowerLine.includes('credit') || lowerLine.includes('cr') || lowerLine.includes('deposit') || lowerLine.includes('received') || lowerLine.includes('refund');
-        if (isOutflow && !isInflow) {
-          amount = -amount;
-        }
+      const isOutflow = lowerLine.includes('debit') || lowerLine.includes('dr') || lowerLine.includes('payment') || lowerLine.includes('transfer to') || lowerLine.includes('withdrawn');
+      const isInflow = lowerLine.includes('credit') || lowerLine.includes('cr') || lowerLine.includes('deposit') || lowerLine.includes('received') || lowerLine.includes('refund');
+      if (amount > 0 && isOutflow && !isInflow) {
+        amount = -amount;
       }
 
       // 3. Extract Reference Number

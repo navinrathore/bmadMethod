@@ -81,65 +81,70 @@ export const DropzoneArea = ({ children }: DropzoneAreaProps) => {
       store.setIsProcessing(true);
       store.addSystemMessage(`Processing ${file.name}...`);
 
-      const reader = new FileReader();
-      if (isPdf) {
-        reader.onload = async (event) => {
-          try {
-            const arrayBuffer = event.target?.result as ArrayBuffer;
-            const { extractTextFromPDF, parseBankTransactions } = await import('../../parsers/pdf-extractor');
-            
-            const extractResult = await extractTextFromPDF(arrayBuffer);
-            if (!extractResult.success || !extractResult.data) {
-              store.addSystemMessage(`Error: Failed to parse ${file.name}. Reason: ${extractResult.error}`);
-              return;
+      try {
+        const reader = new FileReader();
+        if (isPdf) {
+          reader.onload = async (event) => {
+            try {
+              const arrayBuffer = event.target?.result as ArrayBuffer;
+              const { extractTextFromPDF, parseBankTransactions } = await import('../../parsers/pdf-extractor');
+              
+              const extractResult = await extractTextFromPDF(arrayBuffer);
+              if (!extractResult.success || !extractResult.data) {
+                store.addSystemMessage(`Error: Failed to parse ${file.name}. Reason: ${extractResult.error}`);
+                return;
+              }
+              
+              const parseResult = parseBankTransactions(extractResult.data, file.name);
+              if (!parseResult.success || !parseResult.data) {
+                store.addSystemMessage(`Error: Failed to parse ${file.name}. Reason: ${parseResult.error}`);
+                return;
+              }
+              
+              const currentTxList = store.parsedTransactions;
+              store.setParsedTransactions([...currentTxList, ...parseResult.data]);
+              store.addSystemMessage(`Success: Extracted ${parseResult.data.length} transactions from ${file.name}`);
+            } catch (err: unknown) {
+              store.addSystemMessage(`Error: Failed to parse ${file.name}. Reason: ${err instanceof Error ? err.message : String(err)}`);
+            } finally {
+              store.setIsProcessing(false);
             }
-            
-            const parseResult = parseBankTransactions(extractResult.data, file.name);
-            if (!parseResult.success || !parseResult.data) {
-              store.addSystemMessage(`Error: Failed to parse ${file.name}. Reason: ${parseResult.error}`);
-              return;
-            }
-            
-            const currentTxList = store.parsedTransactions;
-            store.setParsedTransactions([...currentTxList, ...parseResult.data]);
-            store.addSystemMessage(`Success: Extracted ${parseResult.data.length} transactions from ${file.name}`);
-          } catch (err: unknown) {
-            store.addSystemMessage(`Error: Failed to parse ${file.name}. Reason: ${err instanceof Error ? err.message : String(err)}`);
-          } finally {
+          };
+          reader.onerror = () => {
+            store.addSystemMessage(`Error: Failed to read ${file.name}`);
             store.setIsProcessing(false);
-          }
-        };
-        reader.onerror = () => {
-          store.addSystemMessage(`Error: Failed to read ${file.name}`);
-          store.setIsProcessing(false);
-        };
-        reader.readAsArrayBuffer(file);
-      } else if (isTxt) {
-        reader.onload = async (event) => {
-          try {
-            const textContent = event.target?.result as string;
-            const { parseChatLogs } = await import('../../parsers/chat-extractor');
-            
-            const parseResult = parseChatLogs(textContent, file.name);
-            if (!parseResult.success || !parseResult.data) {
-              store.addSystemMessage(`Error: Failed to parse ${file.name}. Reason: ${parseResult.error}`);
-              return;
+          };
+          reader.readAsArrayBuffer(file);
+        } else if (isTxt) {
+          reader.onload = async (event) => {
+            try {
+              const textContent = event.target?.result as string;
+              const { parseChatLogs } = await import('../../parsers/chat-extractor');
+              
+              const parseResult = parseChatLogs(textContent, file.name);
+              if (!parseResult.success || !parseResult.data) {
+                store.addSystemMessage(`Error: Failed to parse ${file.name}. Reason: ${parseResult.error}`);
+                return;
+              }
+              
+              const currentMsgList = store.parsedMessages;
+              store.setParsedMessages([...currentMsgList, ...parseResult.data]);
+              store.addSystemMessage(`Success: Extracted ${parseResult.data.length} messages from ${file.name}`);
+            } catch (err: unknown) {
+              store.addSystemMessage(`Error: Failed to parse ${file.name}. Reason: ${err instanceof Error ? err.message : String(err)}`);
+            } finally {
+              store.setIsProcessing(false);
             }
-            
-            const currentMsgList = store.parsedMessages;
-            store.setParsedMessages([...currentMsgList, ...parseResult.data]);
-            store.addSystemMessage(`Success: Extracted ${parseResult.data.length} messages from ${file.name}`);
-          } catch (err: unknown) {
-            store.addSystemMessage(`Error: Failed to parse ${file.name}. Reason: ${err instanceof Error ? err.message : String(err)}`);
-          } finally {
+          };
+          reader.onerror = () => {
+            store.addSystemMessage(`Error: Failed to read ${file.name}`);
             store.setIsProcessing(false);
-          }
-        };
-        reader.onerror = () => {
-          store.addSystemMessage(`Error: Failed to read ${file.name}`);
-          store.setIsProcessing(false);
-        };
-        reader.readAsText(file);
+          };
+          reader.readAsText(file);
+        }
+      } catch (err: unknown) {
+        store.addSystemMessage(`Error: Failed to process ${file.name}. Reason: ${err instanceof Error ? err.message : String(err)}`);
+        store.setIsProcessing(false);
       }
     });
   }, [addFile, addSystemMessage]);

@@ -1,0 +1,59 @@
+# generated: 2026-06-15T11:06:54Z
+# last_updated: 2026-06-15T11:06:54Z
+# project: TestBMadMethod
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: /home/navin/work/AI/bmadMethod/_bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: "2026-06-15T11:06:54Z"
+last_updated: "2026-06-16T05:38:00Z"
+project: TestBMadMethod
+project_key: NOKEY
+tracking_system: file-system
+story_location: /home/navin/work/AI/bmadMethod/_bmad-output/implementation-artifacts
+
+development_status:
+  epic-1: in-progress
+  1-1-initialize-local-workspace-ui-foundation: review
+  1-2-chat-interface-with-drag-and-drop-ingestion: review
+  1-3-local-deterministic-parsing-for-statements-logs: backlog
+  epic-1-retrospective: optional
+  epic-2: backlog
+  2-1-natural-language-querying-via-chat: backlog
+  2-2-local-deterministic-matching-engine: backlog
+  2-3-dynamic-side-panel-with-tabular-results: backlog
+  epic-2-retrospective: optional
+  epic-3: backlog
+  3-1-orphan-transaction-detail-resolution-view: backlog
+  3-2-privacy-preserving-llm-validation-middleware: backlog
+  3-3-finalized-ledger-csv-export: backlog
+  epic-3-retrospective: optional

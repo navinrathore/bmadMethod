@@ -14,10 +14,8 @@ export const DropzoneArea = ({ children }: DropzoneAreaProps) => {
   const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!isDraggingOver) {
-      setIsDraggingOver(true);
-    }
-  }, [isDraggingOver]);
+    setIsDraggingOver(true);
+  }, []);
 
   const handleDragEnter = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -46,7 +44,7 @@ export const DropzoneArea = ({ children }: DropzoneAreaProps) => {
     e.stopPropagation();
     setIsDraggingOver(false);
 
-    const files = Array.from(e.dataTransfer.files);
+    const files = Array.from(e.dataTransfer?.files ?? []);
     if (files.length === 0) return;
 
     const MAX_FILE_SIZE_MB = 50;
@@ -64,6 +62,16 @@ export const DropzoneArea = ({ children }: DropzoneAreaProps) => {
 
       if (file.size > MAX_FILE_SIZE_BYTES) {
         addSystemMessage(`Error: ${file.name} exceeds the ${MAX_FILE_SIZE_MB}MB size limit.`);
+        return;
+      }
+
+      // Check if file is already added in state to prevent duplicates
+      const isAlreadyAdded = useReconciliationStore.getState().files.some(
+        (f) => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified
+      );
+
+      if (isAlreadyAdded) {
+        addSystemMessage(`Info: ${file.name} is already uploaded.`);
         return;
       }
 

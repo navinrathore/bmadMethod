@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useReconciliationStore } from '../../store/useReconciliationStore';
 import { ChatMessage } from './ChatMessage';
 import { DropzoneArea } from './DropzoneArea';
@@ -7,6 +7,11 @@ export const ChatWindow = () => {
   const [inputText, setInputText] = useState('');
   const messages = useReconciliationStore((state) => state.messages);
   const addUserMessage = useReconciliationStore((state) => state.addUserMessage);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const handleSend = () => {
     if (inputText.trim()) {
@@ -16,7 +21,8 @@ export const ChatWindow = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
+      e.preventDefault();
       handleSend();
     }
   };
@@ -35,6 +41,7 @@ export const ChatWindow = () => {
               <ChatMessage key={msg.id} message={msg} />
             ))
           )}
+          <div ref={messagesEndRef} />
         </div>
         <div className="p-4 border-t border-border">
           <div className="flex items-center gap-2">

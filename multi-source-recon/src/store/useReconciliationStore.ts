@@ -29,7 +29,7 @@ export const useReconciliationStore = create<ReconciliationStore>((set) => ({
       messages: [
         ...state.messages,
         {
-          id: Math.random().toString(36).substring(2, 9),
+          id: Date.now().toString(36) + Math.random().toString(36).substring(2, 9),
           role: 'system',
           content,
           timestamp: Date.now(),
@@ -41,7 +41,7 @@ export const useReconciliationStore = create<ReconciliationStore>((set) => ({
       messages: [
         ...state.messages,
         {
-          id: Math.random().toString(36).substring(2, 9),
+          id: Date.now().toString(36) + Math.random().toString(36).substring(2, 9),
           role: 'user',
           content,
           timestamp: Date.now(),

@@ -4,11 +4,9 @@
 @tailwind utilities;
 
 @layer base {
-  .theme {
+  :root {
     --font-heading: 'Inter', sans-serif;
     --font-sans: 'Inter', sans-serif;
-  }
-  :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;

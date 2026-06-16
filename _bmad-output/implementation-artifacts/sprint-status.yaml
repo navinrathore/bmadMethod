@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: "2026-06-15T11:06:54Z"
-last_updated: "2026-06-16T08:01:25Z"
+last_updated: "2026-06-16T08:18:22Z"
 project: TestBMadMethod
 project_key: NOKEY
 tracking_system: file-system
@@ -43,8 +43,8 @@ story_location: /home/navin/work/AI/bmadMethod/_bmad-output/implementation-artif
 
 development_status:
   epic-1: in-progress
-  1-1-initialize-local-workspace-ui-foundation: in-progress
-  1-2-chat-interface-with-drag-and-drop-ingestion: in-progress
+  1-1-initialize-local-workspace-ui-foundation: done
+  1-2-chat-interface-with-drag-and-drop-ingestion: done
   1-3-local-deterministic-parsing-for-statements-logs: backlog
   epic-1-retrospective: optional
   epic-2: backlog

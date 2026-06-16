@@ -1,7 +1,7 @@
 ---
 epic: "1"
 story: "1"
-status: "review"
+status: "in-progress"
 title: "Initialize Local Workspace & UI Foundation"
 baseline_commit: "NO_VCS"
 ---
@@ -62,7 +62,7 @@ So that I have a clean, accessible workspace for my chat and financial data.
 - Ensure Slate/Gray color palette is configured in Tailwind config with Blue accents.
 
 ## 4. Completion Status
-**Status:** review
+**Status:** in-progress
 **Note:** Ultimate context engine analysis completed - comprehensive developer guide created.
 
 ## Tasks/Subtasks
@@ -75,18 +75,18 @@ So that I have a clean, accessible workspace for my chat and financial data.
 
 ### Review Findings
 - [ ] [Review][Patch] Fix ESM ReferenceError in tailwind.config.js by using ES import syntax [tailwind.config.js:161]
-- [ ] [Review][Patch] Create src/lib/utils.ts to provide the missing cn helper [src/lib/utils.ts:1]
-- [ ] [Review][Patch] Add DOM.Iterable to tsconfig.app.json lib block [tsconfig.app.json:8]
+- [x] [Review][Patch] Create src/lib/utils.ts to provide the missing cn helper [src/lib/utils.ts:1]
+- [x] [Review][Patch] Add DOM.Iterable to tsconfig.app.json lib block [tsconfig.app.json:8]
 - [ ] [Review][Patch] Apply .theme class to body in index.css [src/index.css:182]
-- [ ] [Review][Patch] Improve accessibility and UX for chat input, buttons, and state [src/components/chat/ChatWindow.tsx:320]
+- [x] [Review][Patch] Improve accessibility and UX for chat input, buttons, and state [src/components/chat/ChatWindow.tsx:320]
 - [ ] [Review][Patch] Use collision-resistant ID generation for messages in store [src/store/useReconciliationStore.ts:32]
-- [ ] [Review][Patch] Support empty MIME types and uppercase file extensions in Dropzone [src/components/chat/DropzoneArea.tsx:53]
+- [x] [Review][Patch] Support empty MIME types and uppercase file extensions in Dropzone [src/components/chat/DropzoneArea.tsx:53]
 - [ ] [Review][Patch] Add safety nullish check for dataTransfer.files in Dropzone [src/components/chat/DropzoneArea.tsx:44]
 - [ ] [Review][Patch] Fix useCallback dependency loop in DropzoneArea dragOver [src/components/chat/DropzoneArea.tsx:17]
 - [ ] [Review][Patch] Add KeyDown IME composition check and preventDefault for Enter key [src/components/chat/ChatWindow.tsx:19]
-- [ ] [Review][Patch] Enforce maximum file size limit on drag-and-drop ingestion [src/components/chat/DropzoneArea.tsx:56]
+- [x] [Review][Patch] Enforce maximum file size limit on drag-and-drop ingestion [src/components/chat/DropzoneArea.tsx:56]
 - [ ] [Review][Patch] Prevent duplicate files from being added to store [src/store/useReconciliationStore.ts:13]
-- [ ] [Review][Patch] Make split layout persistent across all screen sizes in App.tsx [src/App.tsx:9-16]
+- [x] [Review][Patch] Make split layout persistent across all screen sizes in App.tsx [src/App.tsx:9-16]
 - [x] [Review][Defer] Clean up redundant and unused dependencies in package.json [package.json:19] — deferred, pre-existing
 - [x] [Review][Defer] Use serializable state records instead of raw File objects [src/store/useReconciliationStore.ts:13] — deferred, pre-existing
 

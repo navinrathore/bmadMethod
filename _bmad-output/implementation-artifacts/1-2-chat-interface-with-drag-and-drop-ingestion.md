@@ -1,7 +1,7 @@
 ---
 epic: "1"
 story: "2"
-status: "review"
+status: "in-progress"
 title: "Chat Interface with Drag-and-Drop Ingestion"
 baseline_commit: "NO_VCS"
 ---
@@ -59,7 +59,7 @@ So that I can securely upload my bank statements and chat logs.
 - Ensure the interactions follow the Inter font, Slate/Gray colors with Blue accents for the dropzone border.
 
 ## 5. Completion Status
-**Status:** review
+**Status:** in-progress
 **Note:** Ultimate context engine analysis completed - comprehensive developer guide created.
 
 ## Tasks/Subtasks
@@ -67,6 +67,17 @@ So that I can securely upload my bank statements and chat logs.
 - [x] Create `ChatMessage.tsx` for displaying messages
 - [x] Create `DropzoneArea.tsx` to handle drag-and-drop events and visual overlay
 - [x] Update `ChatWindow.tsx` to integrate the dropzone and message rendering
+
+### Review Findings
+- [ ] [Review][Patch] Fix useCallback dependency loop in DropzoneArea dragOver [src/components/chat/DropzoneArea.tsx:17]
+- [ ] [Review][Patch] Add safety check for nullish dataTransfer.files in Dropzone [src/components/chat/DropzoneArea.tsx:44]
+- [ ] [Review][Patch] Add KeyDown IME composition check and preventDefault for Enter key [src/components/chat/ChatWindow.tsx:19]
+- [ ] [Review][Patch] Prevent duplicate files from being added to store [src/store/useReconciliationStore.ts:13]
+- [ ] [Review][Patch] Auto-scroll message list to bottom on new message ingestion [src/components/chat/ChatWindow.tsx:25]
+- [ ] [Review][Patch] Fix ESM ReferenceError in tailwind.config.js by using ES import syntax [tailwind.config.js:161]
+- [ ] [Review][Patch] Apply .theme class to body in index.css [src/index.css:182]
+- [ ] [Review][Patch] Use collision-resistant ID generation for messages in store [src/store/useReconciliationStore.ts:32]
+- [x] [Review][Defer] Use serializable state records instead of raw File objects [src/store/useReconciliationStore.ts:13] — deferred, pre-existing
 
 ## Dev Agent Record
 **Implementation Plan:**

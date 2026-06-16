@@ -41,12 +41,15 @@ export const ChatWindow = () => {
             <input 
               type="text" 
               placeholder="Type a message..." 
+              aria-label="Chat message input"
               className="flex-1 px-4 py-2 rounded-md border border-input bg-transparent shadow-sm focus:outline-none focus:ring-1 focus:ring-primary"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
             />
             <button 
+              type="button"
+              aria-label="Send message"
               className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm hover:bg-primary/90 disabled:opacity-50 transition-colors"
               onClick={handleSend}
               disabled={!inputText.trim()}

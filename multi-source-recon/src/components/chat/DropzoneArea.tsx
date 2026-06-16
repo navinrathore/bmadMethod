@@ -49,16 +49,26 @@ export const DropzoneArea = ({ children }: DropzoneAreaProps) => {
     const files = Array.from(e.dataTransfer.files);
     if (files.length === 0) return;
 
-    files.forEach((file) => {
-      const isPdf = file.type === 'application/pdf' || file.name.endsWith('.pdf');
-      const isTxt = file.type === 'text/plain' || file.name.endsWith('.txt');
+    const MAX_FILE_SIZE_MB = 50;
+    const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
-      if (isPdf || isTxt) {
-        addFile(file);
-        addSystemMessage(`File received: ${file.name}. Ready for local parsing.`);
-      } else {
+    files.forEach((file) => {
+      const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
+      const isPdf = file.type === 'application/pdf' || ext === 'pdf';
+      const isTxt = file.type === 'text/plain' || ext === 'txt';
+
+      if (!isPdf && !isTxt) {
         addSystemMessage(`Warning: Unsupported file format (${file.name}). Only .pdf and .txt are allowed.`);
+        return;
       }
+
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        addSystemMessage(`Error: ${file.name} exceeds the ${MAX_FILE_SIZE_MB}MB size limit.`);
+        return;
+      }
+
+      addFile(file);
+      addSystemMessage(`File received: ${file.name}. Ready for local parsing.`);
     });
   }, [addFile, addSystemMessage]);
 

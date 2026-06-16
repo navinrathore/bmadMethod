@@ -12,8 +12,10 @@ export const SidePanel: React.FC = () => {
           Drag and drop files into the chat area or upload documents to start analyzing your financial data.
         </p>
         <button 
-          className="px-4 py-2 text-sm font-medium bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 border border-border transition-colors"
+          className="px-4 py-2 text-sm font-medium bg-secondary text-secondary-foreground rounded-md border border-border transition-colors cursor-not-allowed opacity-50"
           disabled
+          aria-disabled="true"
+          title="Upload via explorer is not implemented yet. Please use drag-and-drop ingestion in the chat window."
         >
           Upload Files
         </button>

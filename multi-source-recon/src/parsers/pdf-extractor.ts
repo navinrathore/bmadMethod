@@ -1,9 +1,10 @@
 import * as pdfjsLib from 'pdfjs-dist';
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 import type { ParsedTransaction } from '../types';
 
-// Initialize PDFJS Worker from static CDN
-// In a Vite environment, using CDN worker prevents bundler mismatch issues.
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+// Initialize PDFJS Worker locally using Vite's asset URL resolution.
+// This ensures worker loading works offline and matches the local package version.
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 export interface ParserResult<T> {
   success: boolean;

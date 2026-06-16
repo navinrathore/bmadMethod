@@ -1,0 +1,386 @@
+# Edge Case Hunter Code Review Prompt
+
+You are the Edge Case Hunter. Review the following unified git diff. You have read access to the project. Look for unhandled edge cases, boundary conditions, potential runtime errors, race conditions, type issues, or unhandled exceptions.
+
+## Diff Output
+```diff
+diff --git a/multi-source-recon/package.json b/multi-source-recon/package.json
+new file mode 100644
+index 0000000..25a7e32
+--- /dev/null
++++ b/multi-source-recon/package.json
+@@ -0,0 +1,44 @@
++{
++  "name": "multi-source-recon",
++  "private": true,
++  "version": "0.0.0",
++  "type": "module",
++  "scripts": {
++    "dev": "vite",
++    "build": "tsc -b && vite build",
++    "lint": "eslint .",
++    "preview": "vite preview"
++  },
++  "dependencies": {
++    "@base-ui/react": "^1.5.0",
++    "@fontsource-variable/geist": "^5.2.9",
++    "@fontsource/inter": "^5.2.8",
++    "class-variance-authority": "^0.7.1",
++    "clsx": "^2.1.1",
++    "lucide-react": "^1.18.0",
++    "react": "^19.2.6",
++    "react-dom": "^19.2.6",
++    "shadcn": "^4.11.0",
++    "tailwind-merge": "^3.6.0",
++    "tailwindcss-animate": "^1.0.7",
++    "tw-animate-css": "^1.4.0",
++    "zustand": "^5.0.14"
++  },
++  "devDependencies": {
++    "@eslint/js": "^10.0.1",
++    "@types/node": "^24.13.2",
++    "@types/react": "^19.2.14",
++    "@types/react-dom": "^19.2.3",
++    "@vitejs/plugin-react": "^6.0.1",
++    "autoprefixer": "^10.5.0",
++    "eslint": "^10.3.0",
++    "eslint-plugin-react-hooks": "^7.1.1",
++    "eslint-plugin-react-refresh": "^0.5.2",
++    "globals": "^17.6.0",
++    "postcss": "^8.5.15",
++    "tailwindcss": "^3.4.19",
++    "typescript": "~6.0.2",
++    "typescript-eslint": "^8.59.2",
++    "vite": "^8.0.12"
++  }
++}
+diff --git a/multi-source-recon/vite.config.ts b/multi-source-recon/vite.config.ts
+new file mode 100644
+index 0000000..b16310d
+--- /dev/null
++++ b/multi-source-recon/vite.config.ts
+@@ -0,0 +1,13 @@
++import { defineConfig } from 'vite'
++import react from '@vitejs/plugin-react'
++import path from 'path'
++
++// https://vite.dev/config/
++export default defineConfig({
++  plugins: [react()],
++  resolve: {
++    alias: {
++      "@": path.resolve(__dirname, "./src"),
++    },
++  },
++})
+diff --git b/multi-source-recon/tsconfig.app.json a/multi-source-recon/tsconfig.app.json
+new file mode 100644
+index 0000000..cb6963b
+--- /dev/null
++++ b/multi-source-recon/tsconfig.app.json
+@@ -0,0 +1,30 @@
++{
++  "compilerOptions": {
++    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
++    "target": "es2023",
++    "lib": ["ES2023", "DOM"],
++    "module": "esnext",
++    "types": ["vite/client"],
++    "skipLibCheck": true,
++    "paths": {
++      "@/*": [
++        "./src/*"
++      ]
++    },
++
++    /* Bundler mode */
++    "moduleResolution": "bundler",
++    "allowImportingTsExtensions": true,
++    "verbatimModuleSyntax": true,
++    "moduleDetection": "force",
++    "noEmit": true,
++    "jsx": "react-jsx",
++
++    /* Linting */
++    "noUnusedLocals": true,
++    "noUnusedParameters": true,
++    "erasableSyntaxOnly": true,
++    "noFallthroughCasesInSwitch": true
++  },
++  "include": ["src"]
++}
+diff --git a/multi-source-recon/tailwind.config.js b/multi-source-recon/tailwind.config.js
+new file mode 100644
+index 0000000..6c22580
+--- /dev/null
++++ b/multi-source-recon/tailwind.config.js
+@@ -0,0 +1,52 @@
++/** @type {import('tailwindcss').Config} */
++export default {
++  darkMode: ["class"],
++  content: [
++    "./index.html",
++    "./src/**/*.{js,ts,jsx,tsx}",
++  ],
++  theme: {
++    extend: {
++      fontFamily: {
++        sans: ['Inter', 'sans-serif'],
++      },
++      colors: {
++        border: "hsl(var(--border))",
++        input: "hsl(var(--input))",
++        ring: "hsl(var(--ring))",
++        background: "hsl(var(--background))",
++        foreground: "hsl(var(--foreground))",
++        primary: {
++          DEFAULT: "hsl(var(--primary))",
++          foreground: "hsl(var(--primary-foreground))",
++        },
++        secondary: {
++          DEFAULT: "hsl(var(--secondary))",
++          foreground: "hsl(var(--secondary-foreground))",
++        },
++        destructive: {
++          DEFAULT: "hsl(var(--destructive))",
++          foreground: "hsl(var(--destructive-foreground))",
++        },
++        muted: {
++          DEFAULT: "hsl(var(--muted))",
++          foreground: "hsl(var(--muted-foreground))",
++        },
++        accent: {
++          DEFAULT: "hsl(var(--accent))",
++          foreground: "hsl(var(--accent-foreground))",
++        },
++        popover: {
++          DEFAULT: "hsl(var(--popover))",
++          foreground: "hsl(var(--popover-foreground))",
++        },
++        card: {
++          DEFAULT: "hsl(var(--card))",
++          foreground: "hsl(var(--card-foreground))",
++        },
++      },
++    },
++  },
++  plugins: [require("tailwindcss-animate")],
++}
++
+diff --git a/multi-source-recon/postcss.config.js b/multi-source-recon/postcss.config.js
+new file mode 100644
+index 0000000..2e7af2b
+--- /dev/null
++++ b/multi-source-recon/postcss.config.js
+@@ -0,0 +1,6 @@
++export default {
++  plugins: {
++    tailwindcss: {},
++    autoprefixer: {},
++  },
++}
+diff --git a/multi-source-recon/src/index.css b/multi-source-recon/src/index.css
+new file mode 100644
+index 0000000..7020a0f
+--- /dev/null
++++ b/multi-source-recon/src/index.css
+@@ -0,0 +1,63 @@
++@import "@fontsource/inter";
++@tailwind base;
++@tailwind components;
++@tailwind utilities;
++
++@layer base {
++  .theme {
++    --font-heading: 'Inter', sans-serif;
++    --font-sans: 'Inter', sans-serif;
++  }
++  :root {
++    --background: 0 0% 100%;
++    --foreground: 222.2 84% 4.9%;
++    --card: 0 0% 100%;
++    --card-foreground: 222.2 84% 4.9%;
++    --popover: 0 0% 100%;
++    --popover-foreground: 222.2 84% 4.9%;
++    --primary: 221.2 83.2% 53.3%; /* Blue accent */
++    --primary-foreground: 210 40% 98%;
++    --secondary: 210 40% 96.1%; /* Slate */
++    --secondary-foreground: 222.2 47.4% 11.2%;
++    --muted: 210 40% 96.1%;
++    --muted-foreground: 215.4 16.3% 46.9%; /* Gray */
++    --accent: 210 40% 96.1%;
++    --accent-foreground: 222.2 47.4% 11.2%;
++    --destructive: 0 84.2% 60.2%;
++    --destructive-foreground: 210 40% 98%;
++    --border: 214.3 31.8% 91.4%;
++    --input: 214.3 31.8% 91.4%;
++    --ring: 221.2 83.2% 53.3%;
++    --radius: 0.5rem;
++  }
++  .dark {
++    --background: 222.2 84% 4.9%;
++    --foreground: 210 40% 98%;
++    --card: 222.2 84% 4.9%;
++    --card-foreground: 210 40% 98%;
++    --popover: 222.2 84% 4.9%;
++    --popover-foreground: 210 40% 98%;
++    --primary: 217.2 91.2% 59.8%; /* Blue accent */
++    --primary-foreground: 222.2 47.4% 11.2%;
++    --secondary: 217.2 32.6% 17.5%; /* Slate dark */
++    --secondary-foreground: 210 40% 98%;
++    --muted: 217.2 32.6% 17.5%;
++    --muted-foreground: 215 20.2% 65.1%; /* Gray dark */
++    --accent: 217.2 32.6% 17.5%;
++    --accent-foreground: 210 40% 98%;
++    --destructive: 0 62.8% 30.6%;
++    --destructive-foreground: 210 40% 98%;
++    --border: 217.2 32.6% 17.5%;
++    --input: 217.2 32.6% 17.5%;
++    --ring: 224.3 76.3% 48%;
++  }
++  * {
++    @apply border-border outline-ring/50;
++  }
++  body {
++    @apply bg-background text-foreground;
++  }
++  html {
++    @apply font-sans;
++  }
++}
+diff --git a/multi-source-recon/src/App.tsx b/multi-source-recon/src/App.tsx
+new file mode 100644
+index 0000000..058770a
+--- /dev/null
++++ b/multi-source-recon/src/App.tsx
+@@ -0,0 +1,21 @@
++
++import { ChatWindow } from './components/chat/ChatWindow';
++import { SidePanel } from './components/panel/SidePanel';
++
++function App() {
++  return (
++    <div className="flex h-screen w-full overflow-hidden bg-background font-sans text-foreground">
++      {/* Left/Center Pane: Chat Area (60% width) */}
++      <main className="w-full lg:w-3/5 h-full flex flex-col shrink-0">
++        <ChatWindow />
++      </main>
++
++      {/* Right Pane: Data Panel (40% width) */}
++      <aside className="hidden lg:flex w-2/5 h-full flex-col shrink-0">
++        <SidePanel />
++      </aside>
++    </div>
++  );
++}
++
++export default App;
+diff --git a/multi-source-recon/src/components/chat/ChatWindow.tsx b/multi-source-recon/src/components/chat/ChatWindow.tsx
+new file mode 100644
+index 0000000..6a2e7cc
+--- /dev/null
++++ b/multi-source-recon/src/components/chat/ChatWindow.tsx
+@@ -0,0 +1,61 @@
++import { useState } from 'react';
++import { useReconciliationStore } from '../../store/useReconciliationStore';
++import { ChatMessage } from './ChatMessage';
++import { DropzoneArea } from './DropzoneArea';
++
++export const ChatWindow = () => {
++  const [inputText, setInputText] = useState('');
++  const messages = useReconciliationStore((state) => state.messages);
++  const addUserMessage = useReconciliationStore((state) => state.addUserMessage);
++
++  const handleSend = () => {
++    if (inputText.trim()) {
++      addUserMessage(inputText.trim());
++      setInputText('');
++    }
++  };
++
++  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
++    if (e.key === 'Enter') {
++      handleSend();
++    }
++  };
++
++  return (
++    <DropzoneArea>
++      <div className="flex flex-col h-full bg-background border-r border-border">
++        <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-2">
++          {messages.length === 0 ? (
++            <div className="text-center text-muted-foreground mt-10">
++              <p>Chat interface initialized.</p>
++              <p className="text-sm">Start typing or drop files here to begin.</p>
++            </div>
++          ) : (
++            messages.map((msg) => (
++              <ChatMessage key={msg.id} message={msg} />
++            ))
++          )}
++        </div>
++        <div className="p-4 border-t border-border">
++          <div className="flex items-center gap-2">
++            <input 
++              type="text" 
++              placeholder="Type a message..." 
++              className="flex-1 px-4 py-2 rounded-md border border-input bg-transparent shadow-sm focus:outline-none focus:ring-1 focus:ring-primary"
++              value={inputText}
++              onChange={(e) => setInputText(e.target.value)}
++              onKeyDown={handleKeyDown}
++            />
++            <button 
++              className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm hover:bg-primary/90 disabled:opacity-50 transition-colors"
++              onClick={handleSend}
++              disabled={!inputText.trim()}
++            >
++              Send
++            </button>
++          </div>
++        </div>
++      </div>
++    </DropzoneArea>
++  );
++};
+diff --git a/multi-source-recon/src/components/panel/SidePanel.tsx b/multi-source-recon/src/components/panel/SidePanel.tsx
+new file mode 100644
+index 0000000..66dd618
+--- /dev/null
++++ b/multi-source-recon/src/components/panel/SidePanel.tsx
+@@ -0,0 +1,23 @@
++import { UploadCloud } from 'lucide-react';
++
++export const SidePanel: React.FC = () => {
++  return (
++    <div className="flex flex-col h-full bg-secondary/30 p-6 items-center justify-center text-center">
++      <div className="bg-background p-6 rounded-lg shadow-sm border border-border flex flex-col items-center max-w-sm">
++        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4 text-primary">
++          <UploadCloud className="w-6 h-6" />
++        </div>
++        <h3 className="text-lg font-semibold text-foreground mb-2">No Data Available</h3>
++        <p className="text-sm text-muted-foreground mb-4">
++          Drag and drop files into the chat area or upload documents to start analyzing your financial data.
++        </p>
++        <button 
++          className="px-4 py-2 text-sm font-medium bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 border border-border transition-colors"
++          disabled
++        >
++          Upload Files
++        </button>
++      </div>
++    </div>
++  );
++};
+```
+
+## Instructions
+Please output your findings as a JSON array where each object represents an edge-case finding and has the following exact schema:
+```json
+{
+  "location": "file:line_number",
+  "trigger_condition": "description of what triggers the issue",
+  "guard_snippet": "code suggestion or logic to guard against the issue",
+  "potential_consequence": "description of the impact if not resolved"
+}
+```
+If no findings are found, return an empty array `[]`.

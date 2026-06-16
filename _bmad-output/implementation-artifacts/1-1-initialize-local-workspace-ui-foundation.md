@@ -73,6 +73,23 @@ So that I have a clean, accessible workspace for my chat and financial data.
 - [x] Scaffold `src/components/chat/ChatWindow.tsx`
 - [x] Scaffold `src/components/panel/SidePanel.tsx` with empty state graphic
 
+### Review Findings
+- [ ] [Review][Patch] Fix ESM ReferenceError in tailwind.config.js by using ES import syntax [tailwind.config.js:161]
+- [ ] [Review][Patch] Create src/lib/utils.ts to provide the missing cn helper [src/lib/utils.ts:1]
+- [ ] [Review][Patch] Add DOM.Iterable to tsconfig.app.json lib block [tsconfig.app.json:8]
+- [ ] [Review][Patch] Apply .theme class to body in index.css [src/index.css:182]
+- [ ] [Review][Patch] Improve accessibility and UX for chat input, buttons, and state [src/components/chat/ChatWindow.tsx:320]
+- [ ] [Review][Patch] Use collision-resistant ID generation for messages in store [src/store/useReconciliationStore.ts:32]
+- [ ] [Review][Patch] Support empty MIME types and uppercase file extensions in Dropzone [src/components/chat/DropzoneArea.tsx:53]
+- [ ] [Review][Patch] Add safety nullish check for dataTransfer.files in Dropzone [src/components/chat/DropzoneArea.tsx:44]
+- [ ] [Review][Patch] Fix useCallback dependency loop in DropzoneArea dragOver [src/components/chat/DropzoneArea.tsx:17]
+- [ ] [Review][Patch] Add KeyDown IME composition check and preventDefault for Enter key [src/components/chat/ChatWindow.tsx:19]
+- [ ] [Review][Patch] Enforce maximum file size limit on drag-and-drop ingestion [src/components/chat/DropzoneArea.tsx:56]
+- [ ] [Review][Patch] Prevent duplicate files from being added to store [src/store/useReconciliationStore.ts:13]
+- [ ] [Review][Patch] Make split layout persistent across all screen sizes in App.tsx [src/App.tsx:9-16]
+- [x] [Review][Defer] Clean up redundant and unused dependencies in package.json [package.json:19] — deferred, pre-existing
+- [x] [Review][Defer] Use serializable state records instead of raw File objects [src/store/useReconciliationStore.ts:13] — deferred, pre-existing
+
 ## Dev Agent Record
 **Implementation Plan:**
 Followed the red-green-refactor cycle. Since this was an initialization story, tests weren't applicable for the scaffolding, but I verified the TS compilation via `npx tsc --noEmit`. 

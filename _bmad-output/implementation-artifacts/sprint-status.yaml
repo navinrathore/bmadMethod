@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: "2026-06-15T11:06:54Z"
-last_updated: "2026-06-16T08:23:26Z"
+last_updated: "2026-06-16T08:28:18Z"
 project: TestBMadMethod
 project_key: NOKEY
 tracking_system: file-system
@@ -45,7 +45,7 @@ development_status:
   epic-1: in-progress
   1-1-initialize-local-workspace-ui-foundation: done
   1-2-chat-interface-with-drag-and-drop-ingestion: done
-  1-3-local-deterministic-parsing-for-statements-logs: ready-for-dev
+  1-3-local-deterministic-parsing-for-statements-logs: review
   epic-1-retrospective: optional
   epic-2: backlog
   2-1-natural-language-querying-via-chat: backlog

@@ -2,16 +2,18 @@ import { useState, useEffect, useRef } from 'react';
 import { useReconciliationStore } from '../../store/useReconciliationStore';
 import { ChatMessage } from './ChatMessage';
 import { DropzoneArea } from './DropzoneArea';
+import { Bot } from 'lucide-react';
 
 export const ChatWindow = () => {
   const [inputText, setInputText] = useState('');
   const messages = useReconciliationStore((state) => state.messages);
+  const isProcessing = useReconciliationStore((state) => state.isProcessing);
   const addUserMessage = useReconciliationStore((state) => state.addUserMessage);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, isProcessing]);
 
   const handleSend = () => {
     if (inputText.trim()) {
@@ -41,6 +43,25 @@ export const ChatWindow = () => {
               <ChatMessage key={msg.id} message={msg} />
             ))
           )}
+          
+          {isProcessing && (
+            <div className="flex w-full justify-start mb-4">
+              <div className="flex max-w-[80%] flex-row gap-3">
+                <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary">
+                  <Bot size={18} />
+                </div>
+                <div className="flex flex-col items-start">
+                  <div className="px-4 py-3 rounded-2xl bg-muted/30 text-muted-foreground border border-border text-sm flex items-center gap-1.5">
+                    <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]" />
+                    <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]" />
+                    <span className="w-2 h-2 bg-primary rounded-full animate-bounce" />
+                    <span className="ml-1.5 text-xs font-medium">Processing files securely...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
           <div ref={messagesEndRef} />
         </div>
         <div className="p-4 border-t border-border">

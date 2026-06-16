@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import type { ParsedTransaction, ParsedChatMessage } from '../types';
 
 export type MessageRole = 'user' | 'system';
 
@@ -12,14 +13,24 @@ export interface ChatMessageData {
 interface ReconciliationStore {
   files: File[];
   messages: ChatMessageData[];
+  parsedTransactions: ParsedTransaction[];
+  parsedMessages: ParsedChatMessage[];
+  isProcessing: boolean;
   addFile: (file: File) => void;
   addSystemMessage: (content: string) => void;
   addUserMessage: (content: string) => void;
+  setParsedTransactions: (transactions: ParsedTransaction[]) => void;
+  setParsedMessages: (messages: ParsedChatMessage[]) => void;
+  setIsProcessing: (isProcessing: boolean) => void;
+  clearParsedData: () => void;
 }
 
 export const useReconciliationStore = create<ReconciliationStore>((set) => ({
   files: [],
   messages: [],
+  parsedTransactions: [],
+  parsedMessages: [],
+  isProcessing: false,
   addFile: (file) =>
     set((state) => ({
       files: [...state.files, file],
@@ -47,5 +58,22 @@ export const useReconciliationStore = create<ReconciliationStore>((set) => ({
           timestamp: Date.now(),
         },
       ],
+    })),
+  setParsedTransactions: (transactions) =>
+    set(() => ({
+      parsedTransactions: transactions,
+    })),
+  setParsedMessages: (messages) =>
+    set(() => ({
+      parsedMessages: messages,
+    })),
+  setIsProcessing: (isProcessing) =>
+    set(() => ({
+      isProcessing,
+    })),
+  clearParsedData: () =>
+    set(() => ({
+      parsedTransactions: [],
+      parsedMessages: [],
     })),
 }));

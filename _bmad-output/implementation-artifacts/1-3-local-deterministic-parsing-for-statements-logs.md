@@ -1,7 +1,7 @@
 ---
 epic: "1"
 story: "3"
-status: "ready-for-dev"
+status: "review"
 title: "Local Deterministic Parsing for Statements & Logs"
 baseline_commit: "NO_VCS"
 ---
@@ -75,25 +75,43 @@ So that my sensitive data is extracted without leaving my machine.
 - Verify typescript types are strictly checked and `"DOM.Iterable"` remains in tsconfig to support array conversions from file drops.
 
 ## 5. Completion Status
-**Status:** ready-for-dev
-**Note:** Ultimate context engine analysis completed - comprehensive developer guide created.
+**Status:** review
+**Note:** In-memory PDF extraction, regex statement parsing, and WhatsApp/SMS logs parsing implemented, verified with unit tests, and fully integrated with the UI.
 
 ## Tasks / Subtasks
-- [ ] Define shared TypeScript interfaces for `ParsedTransaction` and `ParsedChatMessage` in `src/types/index.ts`
-- [ ] Extend Zustand store (`useReconciliationStore`) with fields for `parsedTransactions`, `parsedMessages`, and `isProcessing`
-- [ ] Implement `src/parsers/pdf-extractor.ts` wrapper utilizing `pdfjs-dist` to extract plain text from statement pages
-- [ ] Implement Regex bank format parser to convert raw PDF text lines into structured `ParsedTransaction` entries
-- [ ] Implement WhatsApp/SMS parser in `src/parsers/chat-extractor.ts` to convert text rows into `ParsedChatMessage` entries
-- [ ] Update `DropzoneArea.tsx`'s drop handler to trigger the appropriate parser asynchronously based on file extension
-- [ ] Update `ChatWindow.tsx` to render an inline typing indicator when `isProcessing` is true
-- [ ] Update `SidePanel.tsx` to display skeleton loaders when `isProcessing` is true
+- [x] Define shared TypeScript interfaces for `ParsedTransaction` and `ParsedChatMessage` in `src/types/index.ts`
+- [x] Extend Zustand store (`useReconciliationStore`) with fields for `parsedTransactions`, `parsedMessages`, and `isProcessing`
+- [x] Implement `src/parsers/pdf-extractor.ts` wrapper utilizing `pdfjs-dist` to extract plain text from statement pages
+- [x] Implement Regex bank format parser to convert raw PDF text lines into structured `ParsedTransaction` entries
+- [x] Implement WhatsApp/SMS parser in `src/parsers/chat-extractor.ts` to convert text rows into `ParsedChatMessage` entries
+- [x] Update `DropzoneArea.tsx`'s drop handler to trigger the appropriate parser asynchronously based on file extension
+- [x] Update `ChatWindow.tsx` to render an inline typing indicator when `isProcessing` is true
+- [x] Update `SidePanel.tsx` to display skeleton loaders when `isProcessing` is true
 
 ## Dev Agent Record
+**Implementation Plan:**
+Implemented local parsing of PDF statements using `pdfjs-dist` and text chats/SMS logs, saving parsed records to Zustand store and notifying the user with success/error indicators. Created full unit tests for regex extractors.
 
-### Agent Model Used
+**Completion Notes:**
+- Defined `ParsedTransaction` and `ParsedChatMessage` types in `src/types/index.ts`.
+- Extended Zustand store `useReconciliationStore` to include `parsedTransactions`, `parsedMessages`, and `isProcessing` states and actions.
+- Implemented secure browser-based PDF text extractor and regex statement parser in `src/parsers/pdf-extractor.ts`.
+- Implemented WhatsApp and SMS parser in `src/parsers/chat-extractor.ts` supporting multi-line chat continuations.
+- Updated `DropzoneArea.tsx` to asynchronously run the parser pipelines based on file types.
+- Integrated Bot typing indicator bubble inside `ChatWindow.tsx` and animation pulse skeletons inside `SidePanel.tsx` bound to the store's `isProcessing` state.
+- Rendered parsed transactions and messages on the `SidePanel.tsx` as soon as they are processed.
+- Created and executed Vitest unit tests in `src/parsers/__tests__/parsers.test.ts` covering date formats, negative/positive amount detection, and multi-line chat logs.
 
-### Debug Log References
+## File List
+- `package.json` [MODIFY]
+- `src/types/index.ts` [MODIFY]
+- `src/store/useReconciliationStore.ts` [MODIFY]
+- `src/parsers/pdf-extractor.ts` [NEW]
+- `src/parsers/chat-extractor.ts` [NEW]
+- `src/parsers/__tests__/parsers.test.ts` [NEW]
+- `src/components/chat/DropzoneArea.tsx` [MODIFY]
+- `src/components/chat/ChatWindow.tsx` [MODIFY]
+- `src/components/panel/SidePanel.tsx` [MODIFY]
 
-### Completion Notes List
-
-### File List
+## Change Log
+- Implemented client-side deterministic PDF statement and text chat/SMS log parsing with Zustand synchronization and responsive UI indicators. (Date: 2026-06-16)
